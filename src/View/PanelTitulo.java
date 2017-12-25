@@ -3,6 +3,10 @@
  */
 package View;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -20,9 +24,28 @@ public class PanelTitulo extends JPanel
     // Atributos
     // -------------------------------------------------------------------------
     
+    /**
+     * Etiqueta que con la imagen decorativa.
+     */
+    private JLabel imagen;
+    
     // -------------------------------------------------------------------------
     // Constructores
     // -------------------------------------------------------------------------
+    
+    /**
+     * Construye el Panel que muestra la imagen decorativa de la aplicación.
+     */
+    public PanelTitulo()
+    {
+        setBackground(Color.WHITE);
+        setLayout(new BorderLayout( ));
+        ImageIcon icono = new ImageIcon ("data/Titulo.png");
+        imagen = new JLabel(" ");
+        imagen.setIcon(icono);
+        imagen.setHorizontalAlignment(JLabel.CENTER);
+        add(imagen, BorderLayout.CENTER);
+    }
     
     // -------------------------------------------------------------------------
     // Metodos

@@ -1,14 +1,28 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
  */
 package Controller;
 
 /**
- *
- * @author Cristhian User
+ * Clase que representa el Controlador principal de la aplicación.
+ * @author Cristhian Eduardo Castillo Erazo.
  */
-public class Controlador {
+public class Controlador 
+{
+    // -------------------------------------------------------------------------
+    // Constantes
+    // -------------------------------------------------------------------------
+    
+    // -------------------------------------------------------------------------
+    // Atributos
+    // -------------------------------------------------------------------------
+    
+    // -------------------------------------------------------------------------
+    // Constructores
+    // -------------------------------------------------------------------------
+    
+    // -------------------------------------------------------------------------
+    // Metodos
+    // -------------------------------------------------------------------------
     
 }
