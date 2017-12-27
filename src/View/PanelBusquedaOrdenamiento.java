@@ -3,12 +3,14 @@
  */
 package View;
 
+import Controller.Controlador;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -51,22 +53,27 @@ public class PanelBusquedaOrdenamiento extends JPanel implements ActionListener
     /**
      * Boton Ordenar por experiencia.
      */
-    private JButton btnOrdenarExperiencia;
+    private final JButton btnOrdenarExperiencia;
     
     /**
      * Boton Ordenar por Edad.
      */
-    private JButton btnOrdenarEdad;
+    private final JButton btnOrdenarEdad;
     
     /**
      * Boton Ordenar por profesion.
      */
-    private JButton btnOrdenarProfesion;
+    private final JButton btnOrdenarProfesion;
     
     /**
      * Boton Buscar Aspirante.
      */
-    private JButton btnBuscarAspirante;
+    private final JButton btnBuscarAspirante;
+    
+    /**
+     * Controlador principal de la aplicación.
+     */
+    private Controlador ctrl;
     
     // -------------------------------------------------------------------------
     // Constructores
@@ -74,9 +81,11 @@ public class PanelBusquedaOrdenamiento extends JPanel implements ActionListener
     
     /**
      * Construye el Panel Buscar y Ordenamiento.
+     * @param ctrl Controlador principal de la aplicación.
      */
-    public PanelBusquedaOrdenamiento()
+    public PanelBusquedaOrdenamiento(Controlador ctrl)
     {
+        this.ctrl = ctrl;
         this.setBorder(new TitledBorder("Búsqueda y Ordenamiento"));
         this.setLayout(new BorderLayout());
         
@@ -141,15 +150,63 @@ public class PanelBusquedaOrdenamiento extends JPanel implements ActionListener
         grupo.linkSize(SwingConstants.HORIZONTAL, btnOrdenarExperiencia, btnOrdenarEdad, btnOrdenarProfesion, btnBuscarAspirante);
         pnlCentroReal.add(pnlCentro);
         this.add(pnlCentroReal, BorderLayout.CENTER);
+        this.ctrl = ctrl;
         
     }
+    
     // -------------------------------------------------------------------------
     // Metodos
     // -------------------------------------------------------------------------
 
+    /**
+     * Escucha los eventos generados por los botones.
+     * @param e Acción que genero el evento. e != null.
+     */
     @Override
-    public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void actionPerformed(ActionEvent e)
+    {
+        String comando = e.getActionCommand();
+        
+        if(comando.equalsIgnoreCase(ORDENAR_EXPERIENCIA))
+        {
+            ctrl.orderPorExperiencia();
+        }
+        else
+        {
+            if(comando.equalsIgnoreCase(ORDENAR_EDAD))
+            {
+                ctrl.ordenarPorEdad();
+            }
+            else
+            {
+                if(comando.equalsIgnoreCase(ORDENAR_PROFESION))
+                {
+                    ctrl.ordenarPorProfesion();
+                }
+                else
+                {
+                    if(comando.equalsIgnoreCase(BUSCAR_ASPIRANTE))
+                    {
+                        try
+                        {
+                            String nombre = JOptionPane.showInputDialog(this, "Escriba el nombre del aspirante", "Buscar Aspirante", JOptionPane.INFORMATION_MESSAGE);
+                            if(nombre == null)
+                                throw new Exception("No se puede completar la busqueda.");
+                            
+                            if(nombre.trim().equalsIgnoreCase(""))
+                                throw new Exception("El nombre del aspirante no puede estar vacio.");
+                            
+                            ctrl.buscarAspirante(nombre);
+                        }
+                        catch(Exception ex)
+                        {
+                            JOptionPane.showMessageDialog(this, ex.getMessage(), "Buscar Aspirante", JOptionPane.ERROR_MESSAGE);
+                        }
+                        
+                    }
+                }
+            }
+        }
     }
     
 }

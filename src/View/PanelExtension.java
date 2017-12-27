@@ -3,10 +3,12 @@
  */
 package View;
 
+import Controller.Controlador;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
@@ -37,19 +39,29 @@ public class PanelExtension extends JPanel implements ActionListener
     /**
      * Boton Opcion 1.
      */
-    private JButton btnOpcionUno;
+    private final JButton btnOpcionUno;
     
     /**
      * Boton Opcion 2.
      */
-    private JButton btnOpcionDos;
+    private final JButton btnOpcionDos;
+    
+    /**
+     * Controlador principal de la aplicación.
+     */
+    private final Controlador ctrl;
     
     // -------------------------------------------------------------------------
     // Constructores
     // -------------------------------------------------------------------------
     
-    public PanelExtension()
+    /**
+     * Construye el Panel Extensión.
+     * @param ctrl Controlador principal de la aplicación.
+     */
+    public PanelExtension(Controlador ctrl)
     {
+        this.ctrl = ctrl;
         this.setBorder(new TitledBorder("Puntos de Extensión"));
         this.setLayout(new FlowLayout());
         
@@ -65,13 +77,45 @@ public class PanelExtension extends JPanel implements ActionListener
         this.add(btnOpcionDos);
         
     }
+    
     // -------------------------------------------------------------------------
     // Metodos
     // -------------------------------------------------------------------------
 
+    /**
+     * Escucha los eventos generados por los botones.
+     * @param e Acción que genero el evento. e != null.
+     */
     @Override
     public void actionPerformed(ActionEvent e) 
     {
+        String comando = e.getActionCommand();
+        
+        if(comando.equalsIgnoreCase(OPCION_UNO))
+        {
+            try
+            {
+                ctrl.opcionUno();
+            }
+            catch(Exception ex)
+            {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Opción 1", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+        else
+        {
+            if(comando.equalsIgnoreCase(OPCION_DOS))
+            {
+                try
+                {
+                    ctrl.opcionDos();
+                }
+                catch(Exception ex)
+                {
+                    JOptionPane.showMessageDialog(this, ex.getMessage(), "Opción 2", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        }
         
     }
     

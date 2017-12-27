@@ -27,7 +27,7 @@ public class PanelTitulo extends JPanel
     /**
      * Etiqueta que con la imagen decorativa.
      */
-    private JLabel imagen;
+    private final JLabel imagen;
     
     // -------------------------------------------------------------------------
     // Constructores

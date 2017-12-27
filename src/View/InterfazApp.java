@@ -3,16 +3,17 @@
  */
 package View;
 
+import Controller.Controlador;
 import java.awt.BorderLayout;
+import javax.swing.GroupLayout;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-/******************************************************************************
+/**
  * Clase que representa la ventana principal de la aplicación.
  * @author Cristhian Eduardo Castillo Erazo.
- * 
- * 
- ******************************************************************************/
+ */
 public class InterfazApp extends JFrame
 {
     // -------------------------------------------------------------------------
@@ -58,6 +59,11 @@ public class InterfazApp extends JFrame
      */
     private PanelExtension pnlExtension;
     
+    /**
+     * Controlador principal de la aplicación.
+     */
+    private Controlador ctrl;
+    
     // -------------------------------------------------------------------------
     // Constructores
     // -------------------------------------------------------------------------
@@ -67,6 +73,7 @@ public class InterfazApp extends JFrame
      */
     public InterfazApp()
     {
+        ctrl = new Controlador();
         this.setTitle("Bolsa de Empleo");
         this.setLayout(new BorderLayout());
         
@@ -76,19 +83,35 @@ public class InterfazApp extends JFrame
         pnlCentro.setLayout(new BorderLayout());
         
         JPanel pnlNorteCentro = new JPanel();
-        pnlNorteCentro.setLayout(new BorderLayout());
+        GroupLayout grupo = new GroupLayout(pnlNorteCentro);
+        pnlNorteCentro.setLayout(grupo);
         
-        pnlAspirantesRegistrados = new PanelAspirantesRegistrados();
+        
+        pnlAspirantesRegistrados = new PanelAspirantesRegistrados(ctrl);
         pnlDatosAspirante = new PanelDatosAspirante();
-        pnlNorteCentro.add(pnlAspirantesRegistrados, BorderLayout.WEST);
-        pnlNorteCentro.add(pnlDatosAspirante, BorderLayout.CENTER);
         
+        grupo.setHorizontalGroup(grupo.createSequentialGroup()
+                .addGroup(grupo.createParallelGroup()
+                        .addComponent(pnlAspirantesRegistrados)
+                )
+                .addGroup(grupo.createParallelGroup()
+                        .addComponent(pnlDatosAspirante)
+                )
+        );
+        
+        grupo.setVerticalGroup(grupo.createSequentialGroup()
+                .addGroup(grupo.createParallelGroup()
+                        .addComponent(pnlAspirantesRegistrados)
+                        .addComponent(pnlDatosAspirante)
+                )
+        );
+                
         JPanel pnlSurCentro = new JPanel();
         pnlSurCentro.setLayout(new BorderLayout());
 
-        pnlAgregarAspirante = new PanelAgregarAspirante();
-        pnlBusquedaOrdenamiento = new PanelBusquedaOrdenamiento();
-        pnlConsultas = new PanelConsultas();
+        pnlAgregarAspirante = new PanelAgregarAspirante(ctrl);
+        pnlBusquedaOrdenamiento = new PanelBusquedaOrdenamiento(ctrl);
+        pnlConsultas = new PanelConsultas(ctrl);
         
         pnlSurCentro.add(pnlAgregarAspirante , BorderLayout.WEST);
         pnlSurCentro.add(pnlBusquedaOrdenamiento, BorderLayout.CENTER);
@@ -97,7 +120,7 @@ public class InterfazApp extends JFrame
         pnlCentro.add(pnlNorteCentro, BorderLayout.NORTH);
         pnlCentro.add(pnlSurCentro, BorderLayout.CENTER);
         
-        pnlExtension = new PanelExtension();
+        pnlExtension = new PanelExtension(ctrl);
         
         this.getContentPane().add(pnlTitulo, BorderLayout.NORTH);
         this.getContentPane().add(pnlCentro, BorderLayout.CENTER);
@@ -107,7 +130,20 @@ public class InterfazApp extends JFrame
         this.setSize(765,570);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+        
+        ctrl.conectar(pnlDatosAspirante, pnlAspirantesRegistrados);
+        
+        try
+        {
+            ctrl.cargarAspirantes("./data/aspirantes.dat");
+        }
+        catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Cargar Información", JOptionPane.ERROR_MESSAGE);
+        }
+        
     }
+    
     // -------------------------------------------------------------------------
     // Metodos
     // -------------------------------------------------------------------------

@@ -3,11 +3,13 @@
  */
 package View;
 
+import Controller.Controlador;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -55,27 +57,32 @@ public class PanelConsultas extends JPanel implements ActionListener
     /**
      * Boton Mas Joven
      */
-    private JButton btnMasJoven;
+    private final JButton btnMasJoven;
     
     /**
      * Boton Mayor Edad.
      */
-    private JButton btnMayorEdad;
+    private final JButton btnMayorEdad;
     
     /**
      * Boton Mayor Experiencia;
      */
-    private JButton btnMayorExperiencia;
+    private final JButton btnMayorExperiencia;
     
     /**
      * Boton Contratar.
      */
-    private JButton btnContratar;
+    private final JButton btnContratar;
     
     /**
      * Boton Eliminar por Experiencia.
      */
-    private JButton btnEliminarPorExperiencia;
+    private final JButton btnEliminarPorExperiencia;
+    
+    /**
+     * Controlador principal de la aplicación.
+     */
+    private final Controlador ctrl;
     
     // -------------------------------------------------------------------------
     // Constructores
@@ -83,9 +90,11 @@ public class PanelConsultas extends JPanel implements ActionListener
     
     /**
      * Construye el Panel Consultas
+     * @param ctrl Controlador principal de la aplicación.
      */
-    public PanelConsultas ()
+    public PanelConsultas (Controlador ctrl)
     {
+        this.ctrl = ctrl;
         this.setBorder(new TitledBorder("Consultas"));
         this.setLayout(new BorderLayout());
         
@@ -153,17 +162,100 @@ public class PanelConsultas extends JPanel implements ActionListener
         );
         
         this.add(pnlCentro, BorderLayout.CENTER);
-        
-        
     }
+    
     // -------------------------------------------------------------------------
     // Metodos
     // -------------------------------------------------------------------------
 
+    /**
+     * Escucha los eventos generados por los botones.
+     * @param e Acción que genero el evento. e != null.
+     */
     @Override
     public void actionPerformed(ActionEvent e)
     {
+        String comando = e.getActionCommand();
         
+        if(comando.equalsIgnoreCase(MAS_JOVEN))
+        {
+            try
+            {
+                ctrl.aspiranteMasJoven();
+            }
+            catch(Exception ex)
+            {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Más joven", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else
+        {
+            if(comando.equalsIgnoreCase(MAYOR_EDAD))
+            {
+                try
+                {
+                    ctrl.aspiranteMasViejo();
+                }
+                catch(Exception ex)
+                {
+                    JOptionPane.showMessageDialog(this, ex.getMessage(), "Mayor Edad", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            else
+            {
+                if(comando.equalsIgnoreCase(MAYOR_EXPERIENCIA))
+                {
+                    try
+                    {
+                        ctrl.aspiranteMayorExperiencia();
+                    }
+                    catch(Exception ex)
+                    {
+                        JOptionPane.showMessageDialog(this, ex.getMessage(), "Mayor Experiencia", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+                else
+                {
+                    if(comando.equalsIgnoreCase(CONTRATAR))
+                    {
+                        try
+                        {
+                            ctrl.contratarAspirante();
+                        }
+                        catch(Exception ex)
+                        {
+                            JOptionPane.showMessageDialog(this, ex.getMessage(), "Contratar", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                    else
+                    {
+                        if(comando.equalsIgnoreCase(ELIMINAR_POR_EXPERIENCIA))
+                        {
+                            try
+                            {
+                                String experienciaStr = JOptionPane.showInputDialog(this, "Ingrese la experiencia minima requerida", "Eliminar por Experiencia", JOptionPane.INFORMATION_MESSAGE);
+                                if(experienciaStr == null)
+                                    throw new Exception("No se puede completar el proceso.");
+                                int experiencia = Integer.parseInt(experienciaStr);
+                                if(experiencia > 0)
+                                {
+                                    ctrl.eliminarAspirantes(experiencia);
+                                }
+                                else
+                                {
+                                    throw new Exception("La experiencia minima debe ser mayor a cero.");
+                                }
+                                
+                            }
+                            catch(Exception ex)
+                            {
+                                JOptionPane.showMessageDialog(this, ex.getMessage(), "Contratar", JOptionPane.ERROR_MESSAGE);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     
 }

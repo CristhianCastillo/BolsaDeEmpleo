@@ -3,9 +3,13 @@
  */
 package View;
 
+import Controller.Controlador;
+import Model.Aspirante;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.util.ArrayList;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
@@ -35,12 +39,22 @@ public class PanelAspirantesRegistrados extends JPanel implements ListSelectionL
      */
     private final JList listaAspirantes;
     
+    /**
+     * Controlador principal de la aplicación.
+     */
+    private final Controlador ctrl;
+    
     // -------------------------------------------------------------------------
     // Constructores
     // -------------------------------------------------------------------------
     
-    public PanelAspirantesRegistrados()
+    /**
+     * Contruye el Panel Aspirantes Registrados.
+     * @param ctrl Controlador principal de la aplicación.
+     */
+    public PanelAspirantesRegistrados(Controlador ctrl)
     {
+        this.ctrl = ctrl;
         this.setBorder(new TitledBorder("Aspirantes Registrados en la Bolsa"));
         this.setLayout(new BorderLayout());
         
@@ -60,10 +74,58 @@ public class PanelAspirantesRegistrados extends JPanel implements ListSelectionL
     // Metodos
     // -------------------------------------------------------------------------
 
+    /**
+     * Actualiza la lista con los aspirantes de la bolsa de empleo.
+     * @param lista Lista actual de los aspirantes en la bolsa de empleo.
+     */
+    public void refrescarLista(ArrayList<Aspirante> lista)
+    {
+        listaAspirantes.setListData(lista.toArray());
+    }
+    
+    /**
+     * Selecciona un aspirante de la lista para consultar su información.
+     * @param i Posición del aspirante seleccionado.
+     */
+    public void seleccionarElemento(int i)
+    {
+        listaAspirantes.setSelectedIndex(i);
+        listaAspirantes.ensureIndexIsVisible(i);
+    }
+    
+    /**
+     * Obtiene la posición del aspirante seleccionado.
+     * @return Posición del aspirante seleccionado.
+     */
+    public int indiceSeleccionado()
+    {
+        return listaAspirantes.getSelectedIndex();
+    }
+    
+    /**
+     * Metodo que escucha los eventos de la lista de Aspirantes.
+     * @param e Acción que genero el evento. e != null.
+     */
     @Override
     public void valueChanged(ListSelectionEvent e) 
     {
-       
+        try 
+        {
+            if(listaAspirantes.getSelectedValue() != null)
+            {
+                int indice = listaAspirantes.getSelectedIndex();
+                ctrl.actualizarAspirante(indice);
+            }
+            else
+            {
+                ctrl.aspiranteDefecto();
+            }
+            
+        } 
+        catch (Exception ex) 
+        {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Aspirantes Registrados", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
 }
